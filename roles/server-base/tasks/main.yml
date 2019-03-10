@@ -3,6 +3,22 @@
   command: "echo 'Test'"
   changed_when: false
 
+- name: Install classic packages
+  become: true
+  apt:
+    name:
+      - fail2ban
+      - vim
+      - sudo
+      - mosh
+      - borgbackup
+      - htop
+      - sysstat
+      - iotop
+      - iftop
+      - unattended-upgrades
+    state: present
+
 - name: Configure sshd
   become: true
   import_tasks: ssh.yml
