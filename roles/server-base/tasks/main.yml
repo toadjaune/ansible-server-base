@@ -1,0 +1,8 @@
+- name: Ensure we can become root
+  become: true
+  command: "echo 'Test'"
+  changed_when: false
+
+- name: Configure sshd
+  become: true
+  import_tasks: ssh.yml

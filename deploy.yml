@@ -1,5 +1,4 @@
 - name: Deploy on all servers
   hosts: all
-  tasks:
-    - name: Configure sshd
-      import_tasks: tasks/ssh.yml
+  roles:
+    - server-base

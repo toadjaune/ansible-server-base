@@ -1,0 +1,23 @@
+- name: Ensure group ssh exists
+  group:
+    name: ssh
+    state: present
+
+- name: Add users to ssh group
+  user:
+    groups: ssh
+    name: "{{ item }}"
+    append: true
+  loop:
+    - root
+    - "{{ ansible_user_id }}"
+
+- name: Configure sshd
+  blockinfile:
+    dest: /etc/ssh/sshd_config
+    block: |
+      # Restrict access to the ssh group
+      AllowGroups ssh
+    validate: "/usr/sbin/sshd -T -f %s"
+  notify: Restart sshd
+
