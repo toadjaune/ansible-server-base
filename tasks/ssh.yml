@@ -1,0 +1,3 @@
+- name: test
+  command: "echo true"
+  notify: Restart sshd
