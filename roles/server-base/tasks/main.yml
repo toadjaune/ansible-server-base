@@ -13,10 +13,14 @@
       - mosh
       - borgbackup
       - htop
+      # Includes iostat
       - sysstat
       - iotop
       - iftop
       - unattended-upgrades
+      # Includes dig
+      - dnsutils
+      - curl
     state: present
 
 - name: Configure sshd
