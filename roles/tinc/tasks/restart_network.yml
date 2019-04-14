@@ -2,13 +2,27 @@
 
   # The stop command fails if trying to stop a non-running tinc daemon
 - name: Check if tincd is running for network {{ network.name }}
+  become: true
   stat:
     path: "/var/run/tinc.{{ network.name }}.pid"
   register: pidfile
 
 - name: Stop tincd for network {{ network.name }}
-  command: "tincd -n {{ network.name }} -k"
+  become: true
+  command:
+  args:
+    argv:
+      - tincd
+      - -n
+      - "{{ network.name }}"
+      - -k
   when: pidfile.stat.exists
 
 - name: Start tincd for network {{ network.name }}
-  command: "tincd -n {{ network.name }}"
+  become: true
+  command:
+  args:
+    argv:
+      - tincd
+      - -n
+      - "{{ network.name }}"
