@@ -1,0 +1,61 @@
+- name: Factorise common options
+  become: true
+  tags:
+    - tinc
+  block:
+    - name: Create directories
+      file:
+        path: "/etc/tinc/{{ network.name }}/hosts"
+        state: directory
+
+    - name: Check if we already have keys
+      stat:
+        path: "/etc/tinc/{{ network.name }}/rsa_key.pub"
+      register: public_key
+
+    - name: Generate keys
+      command: "tincd -n {{ network.name }} -K4096"
+      when: not public_key.stat.exists
+      notify: Restart tincd
+
+    - name: Get public key
+      slurp:
+        path: "/etc/tinc/{{ network.name }}/rsa_key.pub"
+      register: public_key
+
+    - name: Print public key to help create config files
+      debug:
+        msg: "{{ public_key['content'] | b64decode }}"
+
+    - name: Get configuration for current host
+      set_fact:
+        config: "{{ network['hosts'][inventory_hostname] }}"
+
+    - name: Create tinc.conf
+      copy:
+        dest: "/etc/tinc/{{ network.name }}/tinc.conf"
+        content: "{{ config['tinc.conf'] }}"
+      notify: Restart tincd
+
+    - name: Create tinc-up script
+      copy:
+        dest: "/etc/tinc/{{ network.name }}/tinc-up"
+        mode: 0755
+        content: "{{ config['tinc-up'] }}"
+      notify: Restart tincd
+
+    - name: Create tinc-down script
+      copy:
+        dest: "/etc/tinc/{{ network.name }}/tinc-down"
+        mode: 0755
+        content: "{{ config['tinc-down'] }}"
+      notify: Restart tincd
+
+      # TODO : Manage suppression of files
+    - name: Create files in hosts directory
+      copy:
+        dest: "/etc/tinc/{{ network.name }}/hosts/{{ item.key }}"
+        content: "{{ item.value.host_file }}"
+      loop: "{{ network.hosts | dict2items }}"
+      notify: Restart tincd
+

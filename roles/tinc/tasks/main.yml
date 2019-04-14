@@ -1,0 +1,25 @@
+- name: Install/update tinc (Debian-based OS)
+  become: true
+  apt:
+    name: tinc
+    state: latest
+  when: ansible_os_family == "Debian"
+  tags:
+    - tinc
+  notify: Restart tincd
+
+- name: Configure networks
+  include_tasks: network.yml
+  loop: "{{ tinc_networks }}"
+  loop_control:
+    loop_var: network
+  notify: Restart tincd
+
+  # NB : we currently assume the systemd unit exists and reads /etc/tinc/nets.boot (debian package)
+- name: Add networks to auto-start to /etc/tinc/nets.boot
+  become: true
+  template:
+    src: nets.boot.j2
+    dest: /etc/tinc/nets.boot
+  tags:
+    - tinc

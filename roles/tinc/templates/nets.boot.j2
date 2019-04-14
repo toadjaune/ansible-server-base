@@ -1,0 +1,4 @@
+## This file contains all names of the networks to be started on system startup.
+{% for network in tinc_networks %}
+{{ network.name }}
+{% endfor %}

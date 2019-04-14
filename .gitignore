@@ -1,6 +1,8 @@
-# Ignore inventories
+# Ignore inventories and config
 inventories/*
 !inventories/.gitkeep
+group_vars
+!group_vars/.gitkeep
 
 # Ansible retry files
 *.retry

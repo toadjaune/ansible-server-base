@@ -1,0 +1,6 @@
+  # This restarts all the networks. It could be improved
+- name: Restart tincd
+  include: restart_network.yml
+  loop: "{{ tinc_networks }}"
+  loop_control:
+    loop_var: network
