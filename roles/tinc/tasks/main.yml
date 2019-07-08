@@ -1,3 +1,4 @@
+# NB : this role is kept just in case, but it was never finished nor used
 - name: Install/update tinc (Debian-based OS)
   become: true
   apt:
