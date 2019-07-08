@@ -28,6 +28,10 @@
       # Restrict access to the ssh group
       AllowGroups ssh
 
+      # Keep inactive connections alive
+      ClientAliveInterval 60
+      ClientAliveCountMax 2
+
       # PasswordAuthentication no
       # ChallengeResponseAuthentication no
     validate: "/usr/sbin/sshd -T -f %s"
