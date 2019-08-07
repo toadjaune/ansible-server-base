@@ -26,3 +26,7 @@
 - name: Configure sshd
   become: true
   import_tasks: ssh.yml
+
+- name: Install and configure netdata
+  import_tasks: netdata.yml
+  tags: netdata

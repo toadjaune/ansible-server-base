@@ -1,0 +1,23 @@
+# NB : only debian is currently supported by this file
+# It's not hard to add other distros if needed, though
+
+- name: Install netdata only on debian
+  when: ansible_distribution == "Debian"
+  block:
+    - name: Install netdata packagecloud repos
+      become: true
+      import_role:
+        name: packagecloud
+      vars:
+        # Use the edge repository because deb packaging isn't stable yet
+        # Also, to support the project
+        repository: netdata/netdata-edge
+        os: debian
+        version: "{{ ansible_distribution_release }}"
+
+    - name: Install netdata package
+      become: true
+      apt:
+        name: netdata
+
+    # TODO : Configure netdata

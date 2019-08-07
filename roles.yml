@@ -1,0 +1,3 @@
+- name: packagecloud
+  src: https://github.com/computology/packagecloud-ansible-role
+  scm: git
