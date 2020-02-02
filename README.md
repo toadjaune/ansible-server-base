@@ -1,3 +1,7 @@
+# DEPRECATED
+
+Now switching to iac-perso
+
 # Server-base
 
 This repo installs most of the base stuff I usually want on most servers
